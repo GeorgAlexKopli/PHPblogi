@@ -12,7 +12,12 @@ class Post extends Model
     protected $fillable = ['title', 'content'];
 
     public function author()
-        {
-            return $this->belongsTo(\App\Models\User::class, 'user_id');
-        }
+    {
+        return $this->belongsTo(\App\Models\User::class, 'user_id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class)->latest();
+    }
 }

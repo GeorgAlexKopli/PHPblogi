@@ -40,6 +40,58 @@
                     @endauth
                 </div>
             </div>
+
+            <!-- Comments Section -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-8 p-6">
+                <h3 class="text-lg font-semibold mb-4">Comments ({{ $post->comments->count() }})</h3>
+
+                @auth
+                <!-- Comment Form -->
+                <form action="{{ route('comments.store', $post) }}" method="POST" class="mb-6">
+                    @csrf
+                    <textarea
+                        name="body"
+                        rows="3"
+                        placeholder="Add your comment..."
+                        required
+                        class="w-full rounded border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    ></textarea>
+                    <button type="submit" class="btn btn-primary mt-2 px-4 py-2 rounded-full">
+                        Post Comment
+                    </button>
+                </form>
+                @else
+                <p class="mb-4 text-gray-600 italic">Please <a href="{{ route('login') }}" class="text-indigo-600 underline">log in</a> to comment.</p>
+                @endauth
+
+                <!-- Display Comments -->
+                @forelse ($post->comments as $comment)
+                    <div class="border-b border-gray-200 py-3">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="font-semibold">{{ $comment->user->name ?? 'Deleted User' }}</span>
+                                <span class="text-sm text-gray-500 ml-2">{{ $comment->created_at->diffForHumans() }}</span>
+                            </div>
+
+                            @auth
+                                @if (auth()->id() === $comment->user_id)
+                                    <form action="{{ route('comments.destroy', $comment) }}" method="POST" onsubmit="return confirm('Delete this comment?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-800 text-sm">
+                                            Delete
+                                        </button>
+                                    </form>
+                                @endif
+                            @endauth
+                        </div>
+                        <p class="mt-1">{{ $comment->body }}</p>
+                    </div>
+                @empty
+                    <p class="text-gray-600 italic">No comments yet.</p>
+                @endforelse
+            </div>
+
         </div>
     </div>
 </x-app-layout>
