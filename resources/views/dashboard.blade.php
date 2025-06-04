@@ -10,6 +10,12 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     {{ __("You're logged in!") }}
+
+                    <!-- Button to /blog -->
+                    <a href="{{ url('/blog') }}" 
+                       class="inline-block mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        Go to Blog
+                    </a>
                 </div>
             </div>
         </div>
